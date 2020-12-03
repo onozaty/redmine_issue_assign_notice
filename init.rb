@@ -1,6 +1,8 @@
 require 'redmine'
 
-require_dependency 'redmine_issue_assign_notice/listener'
+require_dependency 'redmine_issue_assign_notice/issue_patch'
+require_dependency 'redmine_issue_assign_notice/issue_hook_listener'
+require_dependency 'redmine_issue_assign_notice/notice_client'
 
 Redmine::Plugin.register :redmine_issue_assign_notice do
   name 'Redmine Issue Assign Notice plugin'
@@ -9,6 +11,8 @@ Redmine::Plugin.register :redmine_issue_assign_notice do
   version '0.0.1'
   url 'https://github.com/onozaty/redmine_issue_assign_notice'
   author_url 'https://github.com/onozaty'
+
+  settings :default => { 'notice_url' => '' }, :partial => 'settings/redmine_issue_assign_notice_settings'
 end
 
 ((Rails.version > "5")? ActiveSupport::Reloader : ActionDispatch::Callbacks).to_prepare do
