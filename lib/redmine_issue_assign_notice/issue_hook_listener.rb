@@ -16,7 +16,7 @@ module RedmineIssueAssignNotice
         return
       end
 
-      notice(issue: issue, new_assgined_to: issue.assigned_to)
+      notice(issue: issue, new_assgined_to: issue.assigned_to, note: issue.description)
     end
 
     def redmine_issue_assign_notice_change(context={})
@@ -33,22 +33,47 @@ module RedmineIssueAssignNotice
       old_assgined_to = User.find(assign_journal.old_value.to_i) unless assign_journal.old_value.nil?
       new_assgined_to = User.find(assign_journal.value.to_i) unless assign_journal.value.nil?
 
-      notice(issue: issue, old_assgined_to: old_assgined_to, new_assgined_to: new_assgined_to)
+      notice(issue: issue, old_assgined_to: old_assgined_to, new_assgined_to: new_assgined_to, note: journal.notes)
     end
 
     private
 
-    def notice(issue:, old_assgined_to: nil, new_assgined_to:)
-      message = create_message(issue, old_assgined_to, new_assgined_to)
+    def notice(issue:, old_assgined_to: nil, new_assgined_to:, note:)
+      message = create_message(issue, old_assgined_to, new_assgined_to, note)
 
       Rails.logger.debug "IssueHookListener#notice message:#{message}"
 
       @client.notice(message, Setting.plugin_redmine_issue_assign_notice['notice_url'])
     end
 
-    def create_message(issue, old_assgined_to, new_assgined_to)
-      "[#{escape issue.project}] (#{escape issue.status}) <#{issue_url issue}|#{escape issue}>\n" +
-        "#{old_assgined_to.nil? ? nil : (escape old_assgined_to) } => #{new_assgined_to.nil? ? nil : (escape new_assgined_to) }"
+    def create_message(issue, old_assgined_to, new_assgined_to, note)
+
+      message = "Assign changed from #{user_name old_assgined_to} to #{user_name new_assgined_to}"
+      message << "\n"
+      message << "[#{escape issue.project}] <#{issue_url issue}|#{escape issue.tracker} ##{issue.id}> #{issue.subject} (#{escape issue.status})"
+      message << "\n"
+      message << trimming(note)
+    end
+
+    def trimming(note)
+      if note.nil?
+        return nil
+      end
+
+      flat = note.gsub(/\r\n|\n|\r/, ' ')
+      if flat.length > 100
+        flat[0, 100] + '...'
+      else
+        flat
+      end
+    end
+
+    def user_name(user)
+      if user.nil?
+        '_[none]_'
+      else
+        "_#{escape user}_"
+      end
     end
 
     def issue_url(issue)
