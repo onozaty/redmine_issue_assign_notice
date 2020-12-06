@@ -1,6 +1,7 @@
 MIT License
 
-Copyright (c) 2020 onozaty
+Base project redmine-slack is Copyright (c) 2016 Samuel Cormier-Iijima (https://github.com/sciyoshi/redmine-slack).
+This project redmine_issue_assign_notice is Copyright (c) 2020 onozaty
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
