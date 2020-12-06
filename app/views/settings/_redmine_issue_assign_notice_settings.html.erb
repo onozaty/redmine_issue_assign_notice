@@ -2,3 +2,12 @@
   <label for="settings_notice_url">Notice URL (Incoming Webhook URL)</label>
   <%= text_field_tag 'settings[notice_url]', @settings[:notice_url], size: 80, id: 'settings_notice_url' %>
 </p>
+<p>
+  <label for="settings_create_api_access_key">Mention to assignee?</label>
+  <%= check_box_tag 'settings[mention_to_assignee]', '1', @settings[:mention_to_assignee] == '1' %>
+  <em class="info">
+    Mention using the ID set in the user custom field.
+    To use it, create a <a href="/custom_fields/new?type=UserCustomField&custom_field[name]=Assign%20Notice%20ID">user custom field</a> named "Assign Notice ID" (without quotes).<br/>
+    For Slack, specify a member ID. For Rocket.Chat, specify a Username. 
+  </em>
+</p>

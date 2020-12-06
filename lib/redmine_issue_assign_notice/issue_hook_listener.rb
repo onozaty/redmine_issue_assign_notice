@@ -39,6 +39,11 @@ module RedmineIssueAssignNotice
     private
 
     def notice(issue:, old_assgined_to: nil, new_assgined_to:, note:)
+
+      if Setting.plugin_redmine_issue_assign_notice['notice_url'].blank?
+        return
+      end
+
       message = create_message(issue, old_assgined_to, new_assgined_to, note)
 
       Rails.logger.debug "IssueHookListener#notice message:#{message}"
@@ -48,23 +53,30 @@ module RedmineIssueAssignNotice
 
     def create_message(issue, old_assgined_to, new_assgined_to, note)
 
-      message = "Assign changed from #{user_name old_assgined_to} to #{user_name new_assgined_to}"
+      message = "#{mention new_assgined_to}"
+      message << " " if message.length > 0
+      message << "Assign changed from #{user_name old_assgined_to} to #{user_name new_assgined_to}"
       message << "\n"
       message << "[#{escape issue.project}] <#{issue_url issue}|#{escape issue.tracker} ##{issue.id}> #{issue.subject} (#{escape issue.status})"
       message << "\n"
       message << trimming(note)
     end
 
-    def trimming(note)
-      if note.nil?
+    def mention(user)
+
+      if user.nil? || Setting.plugin_redmine_issue_assign_notice['mention_to_assignee'] != '1'
         return nil
       end
 
-      flat = note.gsub(/\r\n|\n|\r/, ' ')
-      if flat.length > 100
-        flat[0, 100] + '...'
+      noteice_field = user.custom_field_values.find{ |field| field.custom_field.name == 'Assign Notice ID' }
+      if noteice_field.nil? || noteice_field.value.blank?
+        return nil
+      end
+
+      if slack?
+        "<@#{noteice_field.value}>"
       else
-        flat
+        "@#{noteice_field.value}"
       end
     end
 
@@ -81,7 +93,24 @@ module RedmineIssueAssignNotice
     end
 
     def escape(msg)
-		  msg.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
-  	end
+      msg.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
+    end
+
+    def trimming(note)
+      if note.nil?
+        return nil
+      end
+
+      flat = note.gsub(/\r\n|\n|\r/, ' ')
+      if flat.length > 200
+        flat[0, 200] + '...'
+      else
+        flat
+      end
+    end
+
+    def slack?
+      Setting.plugin_redmine_issue_assign_notice['notice_url'].include? 'slack.com/'
+    end
   end
 end
