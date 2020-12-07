@@ -21,7 +21,7 @@ bundle install --without development test
 
 「Notice URL」には、通知先(Slack、Rocket.Chat等)で発行したIncoming WebhookのURLを入力します。
 
-これだけで、チケットの担当者が変更されたとき、下記のようなメッセージが投稿されるようになります。
+チケットの担当者が変更されたとき、Notice URLで設定したWebhookが実行され、下記のようなメッセージが投稿されるようになります。
 
 ![Screenshot of slack message](screenshots/slack_message.png)
 
