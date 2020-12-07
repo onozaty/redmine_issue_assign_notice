@@ -31,16 +31,29 @@ bundle install --without development test
 * 2行目: プロジェクト名、トラッカー、チケット番号、題名、ステータス
 * 3行目: チケット新規作成時は説明、チケット変更時は注記(先頭200文字まで)
 
+### Set Notice URL for each project?
+
+「Set Notice URL for each project?」をチェックすると、プロジェクト毎にNotice URLを設定できます。  
+プロジェクト毎のNotice URLは、プロジェクトのカスタムフィールドの「Assign Notice URL」が利用されます。カスタムフィールドを作成して、各プロジェクトで設定を行うようにしてください。
+
+![Screenshot of create project custom field](screenshots/create_project_custom_field.png)
+
+![Screenshot of project setting](screenshots/project_setting.png)
+
 ### Mention to assignee?
 
 「Mention to assignee?」をチェックすると、担当者となったユーザに対してのメンションをメッセージに含めることができます。  
 メンション先のIDは、ユーザのカスタムフィールドの「Assign Notice ID」が利用されます。カスタムフィールドを作成して、各ユーザで設定を行うようにしてください。
 
-![Screenshot of create custom field](screenshots/create_customfield.png)
+![Screenshot of create user custom field](screenshots/create_user_custom_field.png)
 
 ![Screenshot of my account](screenshots/my_account.png)
 
 Slackの場合、メンバーIDを入力します。Rocket.Chatの場合、ユーザ名を入力します。
+
+「Assign Notice ID」が設定されているユーザが担当者となった場合、メッセージの先頭にメンションが付与されるようになります。
+
+![Screenshot of slack message](screenshots/slack_mention.png)
 
 ## ライセンス
 

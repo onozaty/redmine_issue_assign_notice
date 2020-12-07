@@ -40,20 +40,27 @@ module RedmineIssueAssignNotice
 
     def notice(issue:, old_assgined_to: nil, new_assgined_to:, note:)
 
-      if Setting.plugin_redmine_issue_assign_notice['notice_url'].blank?
+      if Setting.plugin_redmine_issue_assign_notice['notice_url_each_project'] == '1'
+        notice_url_field = issue.project.custom_field_values.find{ |field| field.custom_field.name == 'Assign Notice URL' }
+        notice_url = notice_url_field.value unless notice_url_field.nil?
+      else
+        notice_url = Setting.plugin_redmine_issue_assign_notice['notice_url']
+      end
+
+      if notice_url.blank?
         return
       end
 
-      message = create_message(issue, old_assgined_to, new_assgined_to, note)
+      message = create_message(issue, old_assgined_to, new_assgined_to, note, notice_url)
 
       Rails.logger.debug "IssueHookListener#notice message:#{message}"
 
-      @client.notice(message, Setting.plugin_redmine_issue_assign_notice['notice_url'])
+      @client.notice(message, notice_url)
     end
 
-    def create_message(issue, old_assgined_to, new_assgined_to, note)
+    def create_message(issue, old_assgined_to, new_assgined_to, note, notice_url)
 
-      message = "#{mention new_assgined_to}"
+      message = "#{mention(new_assgined_to, notice_url)}"
       message << " " if message.length > 0
       message << "Assign changed from #{user_name old_assgined_to} to #{user_name new_assgined_to}"
       message << "\n"
@@ -62,7 +69,7 @@ module RedmineIssueAssignNotice
       message << trimming(note)
     end
 
-    def mention(user)
+    def mention(user, notice_url)
 
       if user.nil? || Setting.plugin_redmine_issue_assign_notice['mention_to_assignee'] != '1'
         return nil
@@ -73,7 +80,7 @@ module RedmineIssueAssignNotice
         return nil
       end
 
-      if slack?
+      if slack?(notice_url)
         "<@#{noteice_field.value}>"
       else
         "@#{noteice_field.value}"
@@ -109,8 +116,8 @@ module RedmineIssueAssignNotice
       end
     end
 
-    def slack?
-      Setting.plugin_redmine_issue_assign_notice['notice_url'].include? 'slack.com/'
+    def slack?(notice_url)
+      notice_url.include? 'slack.com/'
     end
   end
 end

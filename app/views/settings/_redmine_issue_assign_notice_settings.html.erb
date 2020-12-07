@@ -1,9 +1,17 @@
 <p>
   <label for="settings_notice_url">Notice URL (Incoming Webhook URL)</label>
-  <%= text_field_tag 'settings[notice_url]', @settings[:notice_url], size: 80, id: 'settings_notice_url' %>
+  <%= text_field_tag 'settings[notice_url]', @settings[:notice_url], size: 80 %>
 </p>
 <p>
-  <label for="settings_create_api_access_key">Mention to assignee?</label>
+  <label for="settings_notice_url_each_project">Set Notice URL for each project?</label>
+  <%= check_box_tag 'settings[notice_url_each_project]', '1', @settings[:notice_url_each_project] == '1' %>
+  <em class="info">
+    If you checked, you will set the Notice URL for each project.
+    Create and set a <a href="/custom_fields/new?type=ProjectCustomField&custom_field[name]=Assign%20Notice%20URL">project custom field</a> named "Assign Notice URL" (without quotes).<br/>
+  </em>
+</p>
+<p>
+  <label for="settings_mention_to_assignee">Mention to assignee?</label>
   <%= check_box_tag 'settings[mention_to_assignee]', '1', @settings[:mention_to_assignee] == '1' %>
   <em class="info">
     Mention using the ID set in the user custom field.
@@ -11,3 +19,20 @@
     For Slack, specify a member ID. For Rocket.Chat, specify a Username. 
   </em>
 </p>
+<script>
+//<![CDATA[
+  function changeEnableAssignNoticeUrl() {
+    if ($('#settings_notice_url_each_project').prop('checked')) {
+      $('#settings_notice_url').prop('disabled', true);
+    } else {
+      $('#settings_notice_url').prop('disabled', false);
+    }
+  }
+
+  $('#settings_notice_url_each_project').on('change', function() {
+    changeEnableAssignNoticeUrl();
+  });
+
+  changeEnableAssignNoticeUrl();
+//]]>
+</script>
