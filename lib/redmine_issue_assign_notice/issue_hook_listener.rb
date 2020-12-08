@@ -16,7 +16,7 @@ module RedmineIssueAssignNotice
         return
       end
 
-      notice(issue: issue, new_assgined_to: issue.assigned_to, note: issue.description)
+      notice(issue: issue, new_assgined_to: issue.assigned_to, note: issue.description, author: issue.author)
     end
 
     def redmine_issue_assign_notice_change(context={})
@@ -33,12 +33,12 @@ module RedmineIssueAssignNotice
       old_assgined_to = User.find(assign_journal.old_value.to_i) unless assign_journal.old_value.nil?
       new_assgined_to = User.find(assign_journal.value.to_i) unless assign_journal.value.nil?
 
-      notice(issue: issue, old_assgined_to: old_assgined_to, new_assgined_to: new_assgined_to, note: journal.notes)
+      notice(issue: issue, old_assgined_to: old_assgined_to, new_assgined_to: new_assgined_to, note: journal.notes, author: journal.user)
     end
 
     private
 
-    def notice(issue:, old_assgined_to: nil, new_assgined_to:, note:)
+    def notice(issue:, old_assgined_to: nil, new_assgined_to:, note:, author:)
 
       if Setting.plugin_redmine_issue_assign_notice['notice_url_each_project'] == '1'
         notice_url_field = issue.project.custom_field_values.find{ |field| field.custom_field.name == 'Assign Notice URL' }
@@ -51,16 +51,16 @@ module RedmineIssueAssignNotice
         return
       end
 
-      message = create_message(issue, old_assgined_to, new_assgined_to, note, notice_url)
+      message = create_message(issue, old_assgined_to, new_assgined_to, note, author, notice_url)
 
       Rails.logger.debug "IssueHookListener#notice message:#{message}"
 
       @client.notice(message, notice_url)
     end
 
-    def create_message(issue, old_assgined_to, new_assgined_to, note, notice_url)
+    def create_message(issue, old_assgined_to, new_assgined_to, note, author, notice_url)
 
-      message = "#{mention(new_assgined_to, notice_url)}"
+      message = "#{mention(new_assgined_to, author, notice_url)}"
       message << " " if message.length > 0
       message << "Assign changed from #{user_name old_assgined_to} to #{user_name new_assgined_to}"
       message << "\n"
@@ -69,13 +69,17 @@ module RedmineIssueAssignNotice
       message << trimming(note)
     end
 
-    def mention(user, notice_url)
+    def mention(assgined_to, author, notice_url)
 
-      if user.nil? || Setting.plugin_redmine_issue_assign_notice['mention_to_assignee'] != '1'
-        return nil
+      if assgined_to.nil? ||
+         Setting.plugin_redmine_issue_assign_notice['mention_to_assignee'] != '1' ||
+         assgined_to == author
+
+         return nil
       end
 
-      noteice_field = user.custom_field_values.find{ |field| field.custom_field.name == 'Assign Notice ID' }
+
+      noteice_field = assgined_to.custom_field_values.find{ |field| field.custom_field.name == 'Assign Notice ID' }
       if noteice_field.nil? || noteice_field.value.blank?
         return nil
       end

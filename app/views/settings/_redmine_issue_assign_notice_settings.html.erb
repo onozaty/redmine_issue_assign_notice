@@ -11,7 +11,7 @@
   </em>
 </p>
 <p>
-  <label for="settings_mention_to_assignee">Mention to assignee?</label>
+  <label for="settings_mention_to_assignee">Mention to assignee?<br/>(If is set by others)</label>
   <%= check_box_tag 'settings[mention_to_assignee]', '1', @settings[:mention_to_assignee] == '1' %>
   <em class="info">
     Mention using the ID set in the user custom field.

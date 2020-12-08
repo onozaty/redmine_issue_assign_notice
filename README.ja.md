@@ -40,9 +40,9 @@ bundle install --without development test
 
 ![Screenshot of project setting](screenshots/project_setting.png)
 
-### Mention to assignee?
+### Mention to assignee? (If is set by others)
 
-「Mention to assignee?」をチェックすると、担当者となったユーザに対してのメンションをメッセージに含めることができます。  
+「Mention to assignee? (If is set by others)」をチェックすると、担当者となったユーザに対してのメンションをメッセージに含めることができます。ただし、担当者自身で設定したものは通知しません。  
 メンション先のIDは、ユーザのカスタムフィールドの「Assign Notice ID」が利用されます。カスタムフィールドを作成して、各ユーザで設定を行うようにしてください。
 
 ![Screenshot of create user custom field](screenshots/create_user_custom_field.png)
