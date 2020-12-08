@@ -16,7 +16,7 @@ module RedmineIssueAssignNotice
         return
       end
 
-      notice(issue: issue, new_assgined_to: issue.assigned_to, note: issue.description, author: issue.author)
+      notice(issue, nil, issue.assigned_to, issue.description, issue.author)
     end
 
     def redmine_issue_assign_notice_change(context={})
@@ -33,12 +33,12 @@ module RedmineIssueAssignNotice
       old_assgined_to = User.find(assign_journal.old_value.to_i) unless assign_journal.old_value.nil?
       new_assgined_to = User.find(assign_journal.value.to_i) unless assign_journal.value.nil?
 
-      notice(issue: issue, old_assgined_to: old_assgined_to, new_assgined_to: new_assgined_to, note: journal.notes, author: journal.user)
+      notice(issue, old_assgined_to, new_assgined_to, journal.notes, journal.user)
     end
 
     private
 
-    def notice(issue:, old_assgined_to: nil, new_assgined_to:, note:, author:)
+    def notice(issue, old_assgined_to, new_assgined_to, note, author)
 
       if Setting.plugin_redmine_issue_assign_notice['notice_url_each_project'] == '1'
         notice_url_field = issue.project.custom_field_values.find{ |field| field.custom_field.name == 'Assign Notice URL' }
@@ -77,7 +77,6 @@ module RedmineIssueAssignNotice
 
          return nil
       end
-
 
       noteice_field = assgined_to.custom_field_values.find{ |field| field.custom_field.name == 'Assign Notice ID' }
       if noteice_field.nil? || noteice_field.value.blank?
