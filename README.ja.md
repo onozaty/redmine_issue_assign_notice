@@ -42,7 +42,10 @@ bundle install --without development test
 
 ### Mention to assignee? (If is set by others)
 
-「Mention to assignee? (If is set by others)」をチェックすると、担当者となったユーザに対してのメンションをメッセージに含めることができます。ただし、担当者自身で設定したものは通知しません。  
+「Mention to assignee? (If is set by others)」をチェックすると、担当者となったユーザに対してのメンションをメッセージに含めることができます。ただし、担当者自身で設定したものは通知しません。
+
+![Screenshot of slack message](screenshots/slack_mention.png)
+
 メンション先のIDは、ユーザのカスタムフィールドの「Assign Notice ID」が利用されます。カスタムフィールドを作成して、各ユーザで設定を行うようにしてください。
 
 ![Screenshot of create user custom field](screenshots/create_user_custom_field.png)
@@ -50,10 +53,6 @@ bundle install --without development test
 ![Screenshot of my account](screenshots/my_account.png)
 
 Slackの場合、メンバーIDを入力します。Rocket.Chatの場合、ユーザ名を入力します。
-
-「Assign Notice ID」が設定されているユーザが担当者となった場合、メッセージの先頭にメンションが付与されるようになります。
-
-![Screenshot of slack message](screenshots/slack_mention.png)
 
 ## ライセンス
 
