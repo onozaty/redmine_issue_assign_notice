@@ -11,12 +11,12 @@
   </em>
 </p>
 <p>
-  <label for="settings_mention_to_assignee">Mention to assignee?<br/>(If is set by others)</label>
+  <label for="settings_mention_to_assignee">Mention to assignee?<br/>(Except when you assign yourself)</label>
   <%= check_box_tag 'settings[mention_to_assignee]', '1', @settings[:mention_to_assignee] == '1' %>
   <em class="info">
     Mention using the ID set in the user custom field.
     To use it, create a <a href="/custom_fields/new?type=UserCustomField&custom_field[name]=Assign%20Notice%20ID">user custom field</a> named "Assign Notice ID" (without quotes).<br/>
-    For Slack, specify a member ID. For Rocket.Chat, specify a Username. 
+    For Slack, specify a member ID. For Rocket.Chat, specify a Username.
   </em>
 </p>
 <script>
