@@ -64,8 +64,18 @@ module RedmineIssueAssignNotice
       message << " " if message.length > 0
       message << "Assign changed from #{user_name old_assgined_to} to #{user_name new_assgined_to}"
       message << "\n"
-      message << "[#{escape issue.project}] <#{issue_url issue}|#{escape issue.tracker} ##{issue.id}> #{issue.subject} (#{escape issue.status})"
+      message << "\n" if teams?(notice_url)
+      message << "[#{escape issue.project}] "
+      if teams?(notice_url)
+        message << "[#{escape issue.tracker} ##{issue.id}](#{issue_url issue}) "
+      else
+        message << "<#{issue_url issue}|#{escape issue.tracker} ##{issue.id}> "
+      end
+      message << "#{escape issue.subject} (#{escape issue.status})"
       message << "\n"
+      message << "\n" if teams?(notice_url)
+      message << "\n"
+      message << "\n" if teams?(notice_url)
       message << trimming(note)
     end
 
@@ -103,7 +113,7 @@ module RedmineIssueAssignNotice
     end
 
     def escape(msg)
-      msg.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
+      msg.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;").gsub("[", "\\[").gsub("]", "\\]")
     end
 
     def trimming(note)
@@ -121,6 +131,10 @@ module RedmineIssueAssignNotice
 
     def slack?(notice_url)
       notice_url.include? 'slack.com/'
+    end
+
+    def teams?(notice_url)
+      notice_url.include? 'office.com/'
     end
   end
 end

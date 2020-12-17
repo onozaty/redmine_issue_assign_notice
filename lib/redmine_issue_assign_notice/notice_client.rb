@@ -15,7 +15,7 @@ module RedmineIssueAssignNotice
         client = HTTPClient.new
         client.ssl_config.cert_store.set_default_paths
         client.ssl_config.ssl_version = :auto
-        client.post_async url, {:payload => params.to_json}
+        client.post_async url, params.to_json, {'Content-Type' => 'application/json; charset=UTF-8'}
 
         Rails.logger.debug "NoticeClient#notice success"
 

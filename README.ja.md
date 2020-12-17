@@ -1,6 +1,6 @@
 # Redmine issue assign notice plugin
 
-チケットの担当者に変更があったことを、SlackやRocket.Chatなどに通知する[Redmine](http://www.redmine.org)のプラグインです。
+チケットの担当者に変更があったことを、SlackやRocket.Chat、Teamsなどに通知する[Redmine](http://www.redmine.org)のプラグインです。
 
 ## インストール方法
 
@@ -52,7 +52,7 @@ bundle install --without development test
 
 ![Screenshot of my account](screenshots/my_account.png)
 
-Slackの場合、メンバーIDを入力します。Rocket.Chatの場合、ユーザ名を入力します。
+Slackの場合、メンバーIDを入力します。Rocket.Chatの場合、ユーザ名を入力します。  
 
 ## ライセンス
 
