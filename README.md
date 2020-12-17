@@ -1,6 +1,6 @@
 # Redmine issue assign notice plugin
 
-It is a plugin of [Redmine](http://www.redmine.org) that notifies Slack, Rocket.Chat, etc. that the issue assignee changed.
+It is a plugin of [Redmine](http://www.redmine.org) that notifies Slack, Rocket.Chat, Teams, etc. that the issue assignee changed.
 
 ## Installation
 
