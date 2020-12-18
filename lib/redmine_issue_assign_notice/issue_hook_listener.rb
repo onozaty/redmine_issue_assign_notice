@@ -74,8 +74,6 @@ module RedmineIssueAssignNotice
       message << "#{escape issue.subject} (#{escape issue.status})"
       message << "\n"
       message << "\n" if teams?(notice_url)
-      message << "\n"
-      message << "\n" if teams?(notice_url)
       message << trimming(note)
     end
 
@@ -118,7 +116,7 @@ module RedmineIssueAssignNotice
 
     def trimming(note)
       if note.nil?
-        return nil
+        return ''
       end
 
       flat = note.gsub(/\r\n|\n|\r/, ' ')
