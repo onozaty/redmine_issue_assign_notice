@@ -54,6 +54,10 @@ bundle install --without development test
 
 Slackの場合、メンバーIDを入力します。Rocket.Chatの場合、ユーザ名を入力します。  
 
+## サポートバージョン
+
+Redmine 3.0.x から 3.4.x, 4.0.x 以降
+
 ## ライセンス
 
 MIT License

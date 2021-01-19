@@ -54,6 +54,10 @@ For the mention ID, the "Assign Notice ID" of the user's custom field is used. M
 
 For Slack, enter the member ID. For Rocket.Chat, enter the user name.
 
+## Supported versions
+
+Redmine 3.0.x - 3.4.x, 4.0.x or later
+
 ## License
 
 MIT License
