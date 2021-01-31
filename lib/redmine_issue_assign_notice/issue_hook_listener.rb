@@ -30,8 +30,8 @@ module RedmineIssueAssignNotice
         return
       end
 
-      old_assgined_to = User.find(assign_journal.old_value.to_i) unless assign_journal.old_value.nil?
-      new_assgined_to = User.find(assign_journal.value.to_i) unless assign_journal.value.nil?
+      old_assgined_to = Principal.find_by_id(assign_journal.old_value.to_i) unless assign_journal.old_value.nil?
+      new_assgined_to = Principal.find_by_id(assign_journal.value.to_i) unless assign_journal.value.nil?
 
       notice(issue, old_assgined_to, new_assgined_to, journal.notes, journal.user)
     end
