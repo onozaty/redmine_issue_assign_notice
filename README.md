@@ -52,7 +52,7 @@ For the mention ID, the "Assign Notice ID" of the user's custom field is used. M
 
 ![Screenshot of my account](screenshots/my_account.png)
 
-For Slack, enter the member ID. For Rocket.Chat, enter the user name.
+For Slack, enter the member ID. For Rocket.Chat, enter the user name. For Google Chat, enter the user ID.
 
 ## Supported versions
 

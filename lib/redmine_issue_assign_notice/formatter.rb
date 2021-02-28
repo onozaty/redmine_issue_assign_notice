@@ -10,6 +10,10 @@ module RedmineIssueAssignNotice
         return Teams.new
       end
 
+      if url.include? 'googleapis.com/'
+        return GoogleChat.new
+      end
+
       Default.new
     end
 
@@ -75,6 +79,12 @@ module RedmineIssueAssignNotice
 
       def mention(id)
         "@#{id}"
+      end
+    end
+
+    class GoogleChat < Default
+      def mention(id)
+        "<users/#{id}>"
       end
     end
   end
