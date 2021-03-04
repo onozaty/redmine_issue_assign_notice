@@ -7,7 +7,7 @@
   <%= check_box_tag 'settings[notice_url_each_project]', '1', @settings[:notice_url_each_project] == '1' %>
   <em class="info">
     If you checked, you will set the Notice URL for each project.
-    Create and set a <a href="/custom_fields/new?type=ProjectCustomField&custom_field[name]=Assign%20Notice%20URL">project custom field</a> named "Assign Notice URL" (without quotes).<br/>
+    Create and set a <%= link_to 'project custom field', { :controller => 'custom_fields', :action => 'new', :type => 'ProjectCustomField', :custom_field => { :name => 'Assign Notice URL' }} %> named "Assign Notice URL" (without quotes).<br/>
   </em>
 </p>
 <p>
@@ -15,8 +15,8 @@
   <%= check_box_tag 'settings[mention_to_assignee]', '1', @settings[:mention_to_assignee] == '1' %>
   <em class="info">
     Mention using the ID set in the user custom field.
-    To use it, create a <a href="/custom_fields/new?type=UserCustomField&custom_field[name]=Assign%20Notice%20ID">user custom field</a> named "Assign Notice ID" (without quotes).<br/>
-    For Slack, specify a member ID. For Rocket.Chat, specify a Username.
+    To use it, create a <%= link_to 'user custom field', { :controller => 'custom_fields', :action => 'new', :type => 'UserCustomField', :custom_field => { :name => 'Assign Notice ID' }} %> named "Assign Notice ID" (without quotes).<br/>
+    For Slack, specify a member ID. For Rocket.Chat, specify a Username. For Google Chat, specify a user ID.
   </em>
 </p>
 <script>

@@ -51,33 +51,35 @@ module RedmineIssueAssignNotice
         return
       end
 
-      message = create_message(issue, old_assgined_to, new_assgined_to, note, author, notice_url)
+      formatter = RedmineIssueAssignNotice::Formatter.create notice_url
+
+      message = create_message(issue, old_assgined_to, new_assgined_to, note, author, formatter)
 
       Rails.logger.debug "IssueHookListener#notice message:#{message}"
 
       @client.notice(message, notice_url)
     end
 
-    def create_message(issue, old_assgined_to, new_assgined_to, note, author, notice_url)
+    def create_message(issue, old_assgined_to, new_assgined_to, note, author, formatter)
 
-      message = "#{mention(new_assgined_to, author, notice_url)}"
-      message << " " if message.length > 0
-      message << "Assign changed from #{user_name old_assgined_to} to #{user_name new_assgined_to}"
-      message << "\n"
-      message << "\n" if teams?(notice_url)
-      message << "[#{escape issue.project}] "
-      if teams?(notice_url)
-        message << "[#{escape issue.tracker} ##{issue.id}](#{issue_url issue}) "
-      else
-        message << "<#{issue_url issue}|#{escape issue.tracker} ##{issue.id}> "
+      message = ""
+
+      mention_to = mention_target(new_assgined_to, author)
+      if mention_to.present?
+        message << formatter.mention(mention_to)
+        message << " "
       end
-      message << "#{escape issue.subject} (#{escape issue.status})"
-      message << "\n"
-      message << "\n" if teams?(notice_url)
-      message << trimming(note)
+
+      message << "Assign changed from #{formatter.user_name old_assgined_to} to #{formatter.user_name new_assgined_to}"
+      message << formatter.change_line
+      message << "[#{formatter.escape issue.project}] "
+      message << formatter.link("#{issue.tracker} ##{issue.id}", issue_url(issue))
+      message << " #{formatter.escape issue.subject} (#{formatter.escape issue.status})"
+      message << formatter.change_line
+      message << formatter.trimming(note)
     end
 
-    def mention(assgined_to, author, notice_url)
+    def mention_target(assgined_to, author)
 
       if assgined_to.nil? ||
          Setting.plugin_redmine_issue_assign_notice['mention_to_assignee'] != '1' ||
@@ -91,48 +93,12 @@ module RedmineIssueAssignNotice
         return nil
       end
 
-      if slack?(notice_url)
-        "<@#{noteice_field.value}>"
-      else
-        "@#{noteice_field.value}"
-      end
-    end
-
-    def user_name(user)
-      if user.nil?
-        '_[none]_'
-      else
-        "_#{escape user}_"
-      end
+      noteice_field.value
     end
 
     def issue_url(issue)
       "#{Setting.protocol}://#{Setting.host_name}/issues/#{issue.id}"
     end
 
-    def escape(msg)
-      msg.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;").gsub("[", "\\[").gsub("]", "\\]")
-    end
-
-    def trimming(note)
-      if note.nil?
-        return ''
-      end
-
-      flat = note.gsub(/\r\n|\n|\r/, ' ')
-      if flat.length > 200
-        flat[0, 200] + '...'
-      else
-        flat
-      end
-    end
-
-    def slack?(notice_url)
-      notice_url.include? 'slack.com/'
-    end
-
-    def teams?(notice_url)
-      notice_url.include? 'office.com/'
-    end
   end
 end

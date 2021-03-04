@@ -52,7 +52,7 @@ bundle install --without development test
 
 ![Screenshot of my account](screenshots/my_account.png)
 
-Slackの場合、メンバーIDを入力します。Rocket.Chatの場合、ユーザ名を入力します。  
+Slackの場合、メンバーIDを入力します。Rocket.Chatの場合、ユーザ名を入力します。Google Chatの場合、ユーザIDを入力します。  
 
 ## サポートバージョン
 
