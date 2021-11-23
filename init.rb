@@ -15,9 +15,7 @@ Redmine::Plugin.register :redmine_issue_assign_notice do
   settings :default => { 'notice_url' => '' }, :partial => 'settings/redmine_issue_assign_notice_settings'
 end
 
-((Rails.version > "5")? ActiveSupport::Reloader : ActionDispatch::Callbacks).to_prepare do
-  require_dependency 'issue'
-  unless Issue.included_modules.include? RedmineIssueAssignNotice::IssuePatch
-    Issue.send(:include, RedmineIssueAssignNotice::IssuePatch)
-  end
+require 'issue'
+unless Issue.included_modules.include? RedmineIssueAssignNotice::IssuePatch
+  Issue.send(:include, RedmineIssueAssignNotice::IssuePatch)
 end
