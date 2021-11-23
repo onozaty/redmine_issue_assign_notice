@@ -1,8 +1,8 @@
 require 'redmine'
 
-require_dependency 'redmine_issue_assign_notice/issue_patch'
-require_dependency 'redmine_issue_assign_notice/issue_hook_listener'
-require_dependency 'redmine_issue_assign_notice/notice_client'
+require File.expand_path('../lib/redmine_issue_assign_notice/issue_patch', __FILE__)
+require File.expand_path('../lib/redmine_issue_assign_notice/issue_hook_listener', __FILE__)
+require File.expand_path('../lib/redmine_issue_assign_notice/notice_client', __FILE__)
 
 Redmine::Plugin.register :redmine_issue_assign_notice do
   name 'Redmine Issue Assign Notice plugin'
