@@ -4,6 +4,7 @@ module RedmineIssueAssignNotice
 
     def initialize
       @client = NoticeClient.new
+      @message_helper = MessageHelper.new
       Rails.logger.debug "[RedmineIssueAssignNotice] IssueHookListener#initialize"
     end
 
@@ -52,9 +53,9 @@ module RedmineIssueAssignNotice
       end
 
       formatter = RedmineIssueAssignNotice::Formatter.create notice_url
-      textMessage = TextMessage.new(formatter)
+      message_creater = TextMessage.new(@message_helper, formatter)
 
-      message = textMessage.create(issue, old_assgined_to, new_assgined_to, note, author)
+      message = message_creater.create(issue, old_assgined_to, new_assgined_to, note, author)
 
       Rails.logger.debug "[RedmineIssueAssignNotice] IssueHookListener#notice message:#{message}"
 

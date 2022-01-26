@@ -1,6 +1,7 @@
 module RedmineIssueAssignNotice
   class TextMessage
-    def initialize(formatter)
+    def initialize(helper, formatter)
+      @helper = helper
       @formatter = formatter
     end
 
@@ -8,7 +9,7 @@ module RedmineIssueAssignNotice
 
       text = ""
 
-      mention_to = MessageHelper.mention_target(new_assgined_to, author)
+      mention_to = @helper.mention_target(new_assgined_to, author)
       if mention_to.present?
         text << @formatter.mention(mention_to)
         text << " "
@@ -17,7 +18,7 @@ module RedmineIssueAssignNotice
       text << "Assign changed from #{@formatter.user_name old_assgined_to} to #{@formatter.user_name new_assgined_to}"
       text << @formatter.change_line
       text << "[#{@formatter.escape issue.project}] "
-      text << @formatter.link("#{issue.tracker} ##{issue.id}", MessageHelper.issue_url(issue))
+      text << @formatter.link("#{issue.tracker} ##{issue.id}", @helper.issue_url(issue))
       text << " #{@formatter.escape issue.subject} (#{@formatter.escape issue.status})"
       text << @formatter.change_line
       text << @formatter.trimming(note)
