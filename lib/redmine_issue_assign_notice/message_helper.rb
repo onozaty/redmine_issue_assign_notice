@@ -1,6 +1,6 @@
 module RedmineIssueAssignNotice
   class MessageHelper
-    def mention_target(assgined_to, author)
+    def self.mention_target(assgined_to, author)
 
       if assgined_to.nil? ||
          Setting.plugin_redmine_issue_assign_notice['mention_to_assignee'] != '1' ||
@@ -17,8 +17,22 @@ module RedmineIssueAssignNotice
       noteice_field.value
     end
 
-    def issue_url(issue)
+    def self.issue_url(issue)
       "#{Setting.protocol}://#{Setting.host_name}/issues/#{issue.id}"
     end
+
+    def self.trimming(note)
+      if note.nil?
+        return ''
+      end
+
+      flat = note.gsub(/\r\n|\n|\r/, ' ')
+      if flat.length > 200
+        flat[0, 200] + '...'
+      else
+        flat
+      end
+    end
+
   end
 end
