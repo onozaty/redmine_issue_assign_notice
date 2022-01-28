@@ -70,7 +70,7 @@ class MesaageCreatorTest < ActiveSupport::TestCase
     note = "a"
     author = User.find(1)
 
-    RedmineIssueAssignNotice::MessageHelper.stubs(:mention_target).returns("user")
+    RedmineIssueAssignNotice::MessageHelper.stubs(:mention_target).returns("mentionId")
 
     # ACTION
     message = message_creator.create(issue, old_assgined_to, new_assgined_to, note, author)
@@ -78,10 +78,40 @@ class MesaageCreatorTest < ActiveSupport::TestCase
     # ASSERT
     assert_equal(
       {
-        :text => 
-          "@user Assign changed from _[none]_ to _John Smith_  \n" +
-          "[eCookbook] [Bug #1](http://localhost:3000/issues/1) Cannot print recipes (New)  \n" +
-          "a"
+        :type => "message",
+        :attachments => [
+          {
+            :contentType => "application/vnd.microsoft.card.adaptive",
+            :content => {
+              :type => "AdaptiveCard",
+              :body => [
+                {
+                  :type => "TextBlock",
+                  :text =>
+                    "<at>John Smith</at> Assign changed from _[none]_ to _John Smith_  \n" +
+                    "[eCookbook] [Bug #1](http://localhost:3000/issues/1) Cannot print recipes (New)  \n" +
+                    "a",
+                  :wrap => true
+                }
+              ],
+              :$schema => "http://adaptivecards.io/schemas/adaptive-card.json",
+              :version => "1.0",
+              :msteams => {
+                :width => "Full",
+                :entities => [
+                  {
+                    :type => "mention",
+                    :text => "<at>John Smith</at>",
+                    :mentioned => {
+                      :id => "mentionId",
+                      :name => "John Smith"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
       },
       message)
   end
