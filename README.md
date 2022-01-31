@@ -1,6 +1,6 @@
 # Redmine issue assign notice plugin
 
-It is a plugin of [Redmine](http://www.redmine.org) that notifies Slack, Rocket.Chat, Teams, etc. that the issue assignee changed.
+It is a plugin of [Redmine](http://www.redmine.org) that notifies Slack, Rocket.Chat, Teams, Google Chat, Mattermost, etc. that the issue assignee changed.
 
 ## Installation
 
@@ -52,7 +52,13 @@ For the mention ID, the "Assign Notice ID" of the user's custom field is used. M
 
 ![Screenshot of my account](screenshots/my_account.png)
 
-For Slack, enter the member ID. For Rocket.Chat, enter the user name. For Google Chat, enter the user ID.
+The ID to be entered depends on the notification destination.
+
+* Slack: member ID
+* Rocket.Chat: user name
+* Teams: UPN (email address)
+* Google Chat: user ID
+* Mattermost: user name
 
 ## Supported versions
 
