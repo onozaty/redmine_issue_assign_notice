@@ -8,7 +8,7 @@ Redmine::Plugin.register :redmine_issue_assign_notice do
   name 'Redmine Issue Assign Notice plugin'
   author 'onozaty'
   description 'A plugin that notifies you that you have been assigned to an issue.'
-  version '2.0.0'
+  version '2.1.0'
   url 'https://github.com/onozaty/redmine_issue_assign_notice'
   author_url 'https://github.com/onozaty'
 
