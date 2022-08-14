@@ -50,11 +50,13 @@ module RedmineIssueAssignNotice
       if notice_url.blank?
         return
       end
+      
+      channel_field = issue.project.custom_field_values.find{ |field| field.custom_field.name == 'Slack Channel Id' }
+      Rails.logger.debug "[RedmineIssueAssignNotice] IssueHookListener#notice channel_field #{channel_field}"
+      channel = channel_field.value unless channel_field.nil?
 
       message_creator = MessageCreator.from(notice_url)
-
-      message = message_creator.create(issue, old_assgined_to, new_assgined_to, note, author)
-
+      message = message_creator.create(issue, old_assgined_to, new_assgined_to, note, author, channel)
       Rails.logger.debug "[RedmineIssueAssignNotice] IssueHookListener#notice message:#{message}"
 
       @client.notice(message, notice_url)

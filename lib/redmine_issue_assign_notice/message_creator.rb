@@ -3,7 +3,7 @@ module RedmineIssueAssignNotice
 
     def from(url)
       if url.include? 'slack.com/'
-        return TextMessageCreator.new(Formatter::Slack.new)
+        return SlackMessageCreator.new(Formatter::Slack.new)
       end
   
       if url.include? 'office.com/'
@@ -24,7 +24,7 @@ module RedmineIssueAssignNotice
         @formatter = formatter
       end
   
-      def create(issue, old_assgined_to, new_assgined_to, note, author)
+      def create(issue, old_assgined_to, new_assgined_to, note, author, channel)
   
         text = ""
   
@@ -45,13 +45,92 @@ module RedmineIssueAssignNotice
         return {:text => text}
       end
     end
+    
+    
+    class SlackMessageCreator
+      def initialize(formatter)
+        @formatter = formatter
+      end
+  
+      def create(issue, old_assgined_to, new_assgined_to, note, author, channel)
+        
+        begin
+          jsonMessage = {}
+          attachments = []
+    
+          attachment = {}
+          attachment[:mrkdwn_in] = "text"
+
+          priority = @formatter.escape(issue.priority)
+          color = "#A0A0A0"
+          case priority
+              when "Urgent"
+                  color = "#FF397A"
+              when "High"
+                  color = "#FFA236"
+              when "Low"
+                  color = "#0000FF"
+          end
+          attachment[:color] = color
+    
+          project = "#{@formatter.escape issue.project}"
+          issue_link = @formatter.link("#{issue.tracker} ##{issue.id}", MessageHelper.issue_url(issue))
+          jsonMessage[:text] = "[#{project}] | [#{issue_link}] #{@formatter.escape issue.subject} \n Assignee has been changed from #{@formatter.user_name old_assgined_to} to #{@formatter.user_name new_assgined_to}"
+                
+          fields = []
+          field = {}
+          field[:title] = "Status"
+          field[:value] = "#{@formatter.escape issue.status}"
+          field[:short] = true
+          fields << field
+          
+          field = {}
+          field[:title] = "Priority"
+          field[:value] = priority
+          field[:short] = true
+          fields << field
+        
+          field = {}
+          field[:title] = "Author"
+          field[:value] = "#{@formatter.escape author}"
+          field[:short] = true
+          fields << field
+    
+          if issue.due_date.present?
+            field = {}
+            field[:title] = "Due Date"
+            field[:value] = "#{issue.due_date}"
+            field[:short] = true
+            fields << field
+          end
+          attachment[:fields] = fields
+          mention_to = MessageHelper.mention_target(new_assgined_to, author)
+          if mention_to.present?
+            attachment[:footer] = "#{@formatter.mention(mention_to)}, please have a look"
+          end
+    
+          attachments << attachment
+          jsonMessage[:attachments] = attachments
+          
+          jsonMessage[:channel] = channel if channel.present?
+          
+    
+          return jsonMessage
+        rescue Exception => e
+            Rails.logger.warn("[RedmineIssueAssignNotice] SlackMessageCreator#create cannot connect create slack message")
+            Rails.logger.warn(e)
+        end
+        
+        
+      end
+    end
 
     class AdaptiveCardCreator
       def initialize()
         @formatter = Formatter::Teams.new
       end
   
-      def create(issue, old_assgined_to, new_assgined_to, note, author)
+      def create(issue, old_assgined_to, new_assgined_to, note, author, channel)
   
         text = ""
 
