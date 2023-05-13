@@ -19,6 +19,13 @@
     For Slack, specify a member ID. For Rocket.Chat, specify a Username. For Google Chat, specify a user ID.
   </em>
 </p>
+<p>
+  <label for="settings_disable_sending_content">Disable sending description and notes?</label>
+  <%= check_box_tag 'settings[disable_sending_content]', '1', @settings[:disable_sending_content] == '1' %>
+  <em class="info">
+    If you checked, the issue description and notes will not be included in notices
+  </em>
+</p>
 <script>
 //<![CDATA[
   function changeEnableAssignNoticeUrl() {

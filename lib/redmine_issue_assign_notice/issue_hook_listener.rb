@@ -47,6 +47,8 @@ module RedmineIssueAssignNotice
         notice_url = Setting.plugin_redmine_issue_assign_notice['notice_url']
       end
 
+      note = '' if Setting.plugin_redmine_issue_assign_notice['disable_sending_content'] == '1'
+
       if notice_url.blank?
         return
       end
