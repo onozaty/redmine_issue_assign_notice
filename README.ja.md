@@ -40,9 +40,9 @@ bundle install --without development test
 
 ![Screenshot of project setting](screenshots/project_setting.png)
 
-### Mention to assignee? (If is set by others)
+### Mention to assignee? (Except when you assign yourself)
 
-「Mention to assignee? (If is set by others)」をチェックすると、担当者となったユーザに対してのメンションをメッセージに含めることができます。ただし、担当者自身で設定したものは通知しません。
+「Mention to assignee? (Except when you assign yourself)」をチェックすると、担当者となったユーザに対してのメンションをメッセージに含めることができます。ただし、担当者自身で設定したものは通知しません。
 
 ![Screenshot of slack message](screenshots/slack_mention.png)
 
@@ -59,6 +59,10 @@ bundle install --without development test
 * Teams: UPN (メールアドレス)
 * Google Chat: ユーザID
 * Mattermost: ユーザ名
+
+### Disable sending description and notes?
+
+「Disable sending description and notes?」をチェックすると、説明および注記をメッセージに含みません。
 
 ## サポートバージョン
 

@@ -40,9 +40,9 @@ The Notice URL for each project is set in the custom field "Assign Notice URL" o
 
 ![Screenshot of project setting](screenshots/project_setting.png)
 
-### Mention to assignee? (If is set by others)
+### Mention to assignee? (Except when you assign yourself)
 
-If you check "Mention to assignee? (If is set by others)", you can include mention for the user who was assigned to the message. However, the one set by the assignee themselves will not be notified.  
+If you check "Mention to assignee? (Except when you assign yourself)", you can include mention for the user who was assigned to the message. However, the one set by the assignee themselves will not be notified.  
 
 ![Screenshot of slack message](screenshots/slack_mention.png)
 
@@ -59,6 +59,10 @@ The ID to be entered depends on the notification destination.
 * Teams: UPN (email address)
 * Google Chat: user ID
 * Mattermost: user name
+
+### Disable sending description and notes?
+
+If you check "Disable sending description and notes?", the issue description and notes will not be included in notices.
 
 ## Supported versions
 
