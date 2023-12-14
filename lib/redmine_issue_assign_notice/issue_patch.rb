@@ -5,7 +5,6 @@ module RedmineIssueAssignNotice
       base.send(:include, InstanceMethods)
 
       base.class_eval do
-        unloadable # Send unloadable so it will not be unloaded in development
         after_create :create_from_issue_for_assign_notice
         after_save :save_from_issue_for_assign_notice
       end
