@@ -40,6 +40,13 @@ module RedmineIssueAssignNotice
 
     def notice(issue, old_assgined_to, new_assgined_to, note, author)
 
+      if new_assgined_to.is_a?(Group)
+        new_assgined_to.users.each do |user|
+          notice(issue, old_assgined_to, user, note, author)
+        end
+        return
+      end
+      
       if Setting.plugin_redmine_issue_assign_notice['notice_url_each_project'] == '1'
         notice_url_field = issue.project.custom_field_values.find{ |field| field.custom_field.name == 'Assign Notice URL' }
         notice_url = notice_url_field.value unless notice_url_field.nil?
