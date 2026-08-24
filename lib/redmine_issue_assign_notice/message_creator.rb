@@ -1,3 +1,5 @@
+require 'uri'
+
 module RedmineIssueAssignNotice
   module MessageCreator
 
@@ -6,7 +8,7 @@ module RedmineIssueAssignNotice
         return TextMessageCreator.new(Formatter::Slack.new)
       end
   
-      if url.include? 'office.com/'
+      if teams_webhook_url?(url)
         return AdaptiveCardCreator.new
       end
 
@@ -17,7 +19,17 @@ module RedmineIssueAssignNotice
       return TextMessageCreator.new(Formatter::Other.new)
     end
 
-    module_function :from
+    def teams_webhook_url?(url)
+      host = URI.parse(url).host.to_s.downcase
+
+      host == 'outlook.office.com' ||
+        host.end_with?('.webhook.office.com') ||
+        host.end_with?('.environment.api.powerplatform.com')
+    rescue URI::InvalidURIError
+      false
+    end
+
+    module_function :from, :teams_webhook_url?
 
     class TextMessageCreator
       def initialize(formatter)
@@ -88,6 +100,7 @@ module RedmineIssueAssignNotice
           :attachments => [
             {
               :contentType => "application/vnd.microsoft.card.adaptive",
+              :contentUrl => nil,
               :content => {
                 :type => "AdaptiveCard",
                 :body => [
