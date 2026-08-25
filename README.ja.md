@@ -64,6 +64,19 @@ bundle install --without development test
 
 「Disable sending description and notes?」をチェックすると、説明および注記をメッセージに含みません。
 
+## 開発
+
+Dev Container を使った開発環境を用意しています。VS Code でこのリポジトリを開き、コンテナ内で再度開いてください。
+
+Redmine は http://localhost:8080 で起動します。
+
+テストは Redmine のディレクトリで実行します。
+
+```
+cd /usr/src/redmine
+bundle exec rake redmine:plugins:test NAME=redmine_issue_assign_notice RAILS_ENV=test
+```
+
 ## サポートバージョン
 
 Redmine 3.0.x から 3.4.x, 4.0.x 以降

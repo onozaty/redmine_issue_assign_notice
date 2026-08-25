@@ -64,6 +64,19 @@ The ID to be entered depends on the notification destination.
 
 If you check "Disable sending description and notes?", the issue description and notes will not be included in notices.
 
+## Development
+
+A Dev Container is provided for development. Open this repository in VS Code and reopen it in the container.
+
+Redmine starts at http://localhost:8080 .
+
+Run the tests from the Redmine directory.
+
+```
+cd /usr/src/redmine
+bundle exec rake redmine:plugins:test NAME=redmine_issue_assign_notice RAILS_ENV=test
+```
+
 ## Supported versions
 
 Redmine 3.0.x - 3.4.x, 4.0.x or later
