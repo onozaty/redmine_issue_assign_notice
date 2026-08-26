@@ -31,6 +31,10 @@ bundle install --without development test
 * 2行目: プロジェクト名、トラッカー、チケット番号、題名、ステータス
 * 3行目: チケット新規作成時は説明、チケット変更時は注記(先頭200文字まで)
 
+### Microsoft Teams
+
+Microsoft Teamsへの通知には、Teams Workflowsの「Webhook アラートをチャネルに送信する」テンプレートで作成したWebhookを利用できます。Workflowを作成して通知先のチームとチャネルを選択するとWebhook URLが発行されるため、そのURLをRedmineの `Notice URL` に設定してください。
+
 ### Set Notice URL for each project?
 
 「Set Notice URL for each project?」をチェックすると、プロジェクト毎にNotice URLを設定できます。  
