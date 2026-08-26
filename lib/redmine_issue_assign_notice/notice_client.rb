@@ -1,12 +1,10 @@
 require 'httpclient'
-require 'uri'
 
 module RedmineIssueAssignNotice
   class NoticeClient
     def notice(message, url)
 
-      host = webhook_host(url)
-      Rails.logger.debug "[RedmineIssueAssignNotice] NoticeClient#notice host:#{host}"
+      Rails.logger.debug "[RedmineIssueAssignNotice] NoticeClient#notice url:#{url}"
 
       begin
         client = HTTPClient.new
@@ -18,28 +16,23 @@ module RedmineIssueAssignNotice
           begin
             res = conn.pop
             if !HTTP::Status.successful?(res.status) 
-              Rails.logger.warn("[RedmineIssueAssignNotice] Failed request to #{host} status:#{res.status}")
+              Rails.logger.warn("[RedmineIssueAssignNotice] Failed request to #{url}")
+              Rails.logger.warn(res.inspect)
               return
             end
 
             Rails.logger.debug "[RedmineIssueAssignNotice] NoticeClient#notice success"
 
           rescue Exception => e
-            Rails.logger.warn("[RedmineIssueAssignNotice] Failed request to #{host} error:#{e.class}")
+            Rails.logger.warn("[RedmineIssueAssignNotice] Failed request to #{url}")
+            Rails.logger.warn(e.inspect)
           end
         end
 
       rescue Exception => e
-        Rails.logger.warn("[RedmineIssueAssignNotice] Failed request to #{host} error:#{e.class}")
+        Rails.logger.warn("[RedmineIssueAssignNotice] Failed request to #{url}")
+        Rails.logger.warn(e.inspect)
       end
-    end
-
-    private
-
-    def webhook_host(url)
-      URI.parse(url).host
-    rescue URI::InvalidURIError
-      nil
     end
   end
 end

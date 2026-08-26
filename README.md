@@ -31,10 +31,6 @@ The content of the message is as follows.
 * Line #2: Project name, tracker, ticket number, title, status
 * Line #3: New ticket creation: description, ticket modification: note (up to 200 characters)
 
-### Microsoft Teams
-
-For Microsoft Teams notifications, you can use a webhook created from the **Send webhook alerts to a channel** template in Teams Workflows. After creating the workflow and selecting the destination team and channel, set the generated webhook URL in Redmine's `Notice URL`.
-
 ### Set Notice URL for each project?
 
 If you check "Set Notice URL for each project?", you can set the Notice URL for each project.  
