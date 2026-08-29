@@ -116,6 +116,24 @@ class MesaageCreatorTest < ActiveSupport::TestCase
       message)
   end
 
+  def test_workflows_webhook_uses_adaptive_card_creator
+
+    # ARRANGE
+    url =
+      "https://defaultxxxxxxxx.e3.environment.api.powerplatform.com:443/" \
+      "powerautomate/automations/direct/cu/10/workflows/xxxxxxxx/" \
+      "triggers/manual/paths/invoke" \
+      "?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dummy"
+
+    # ACTION
+    message_creator = RedmineIssueAssignNotice::MessageCreator.from(url)
+
+    # ASSERT
+    assert_instance_of(
+      RedmineIssueAssignNotice::MessageCreator::AdaptiveCardCreator,
+      message_creator)
+  end
+
   def test_create_mention_googlechat
 
     # ARRANGE
