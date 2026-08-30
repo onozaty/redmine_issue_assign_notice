@@ -38,8 +38,15 @@ module RedmineIssueAssignNotice
 
     private
 
-    def notice(issue, old_assgined_to, new_assgined_to, note, author)
+    def notice(issue, old_assgined_to, new_assgined_to, note, author, group_name = nil)
 
+      if new_assgined_to.is_a?(Group)
+        new_assgined_to.users.each do |user|
+          notice(issue, old_assgined_to, user, note, author, new_assgined_to)
+        end
+        return
+      end
+      
       if Setting.plugin_redmine_issue_assign_notice['notice_url_each_project'] == '1'
         notice_url_field = issue.project.custom_field_values.find{ |field| field.custom_field.name == 'Assign Notice URL' }
         notice_url = notice_url_field.value unless notice_url_field.nil?
@@ -55,7 +62,7 @@ module RedmineIssueAssignNotice
 
       message_creator = MessageCreator.from(notice_url)
 
-      message = message_creator.create(issue, old_assgined_to, new_assgined_to, note, author)
+      message = message_creator.create(issue, old_assgined_to, new_assgined_to, note, author, group_name)
 
       Rails.logger.debug "[RedmineIssueAssignNotice] IssueHookListener#notice message:#{message}"
 

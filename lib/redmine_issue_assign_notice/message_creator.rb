@@ -26,7 +26,7 @@ module RedmineIssueAssignNotice
         @formatter = formatter
       end
   
-      def create(issue, old_assgined_to, new_assgined_to, note, author)
+      def create(issue, old_assgined_to, new_assgined_to, note, author, group_name = nil)
   
         text = ""
   
@@ -35,8 +35,13 @@ module RedmineIssueAssignNotice
           text << @formatter.mention(mention_id)
           text << " "
         end
+
+        if group_name.nil?
+          text << "Assign changed from #{@formatter.user_name old_assgined_to} to #{@formatter.user_name new_assgined_to}"
+        else
+          text << "Assign changed from #{@formatter.user_name old_assgined_to} to #{group_name}"
+        end
   
-        text << "Assign changed from #{@formatter.user_name old_assgined_to} to #{@formatter.user_name new_assgined_to}"
         text << @formatter.change_line
         text << "[#{@formatter.escape issue.project}] "
         text << @formatter.link("#{issue.tracker} ##{issue.id}", MessageHelper.issue_url(issue))
@@ -53,7 +58,7 @@ module RedmineIssueAssignNotice
         @formatter = Formatter::Teams.new
       end
   
-      def create(issue, old_assgined_to, new_assgined_to, note, author)
+      def create(issue, old_assgined_to, new_assgined_to, note, author, group_name = nil)
   
         text = ""
 
@@ -63,7 +68,12 @@ module RedmineIssueAssignNotice
           text << mention_part + " "
         end
 
-        text << "Assign changed from #{@formatter.user_name old_assgined_to} to #{@formatter.user_name new_assgined_to}"
+        if group_name.nil?
+          text << "Assign changed from #{@formatter.user_name old_assgined_to} to #{@formatter.user_name new_assgined_to}"
+        else
+          text << "Assign changed from #{@formatter.user_name old_assgined_to} to #{group_name}"
+        end
+        
         text << @formatter.change_line
         text << "[#{@formatter.escape issue.project}] "
         text << @formatter.link("#{issue.tracker} ##{issue.id}", MessageHelper.issue_url(issue))
