@@ -19,6 +19,8 @@ jobs:
       image: redmine:${{ matrix.redmine }}
     env:
       RAILS_ENV: test
+      # The official image installs gems without the development and test groups.
+      BUNDLE_WITHOUT: development
     defaults:
       run:
         working-directory: /usr/src/redmine
@@ -47,8 +49,9 @@ jobs:
             adapter: sqlite3
             database: db/test.sqlite3
           EOF
-          # The official image installs gems without the development and test groups.
+          # Newer images set it in the bundler config, which takes precedence over BUNDLE_WITHOUT.
           bundle config set --local without development || bundle config --local without development
+          bundle config
           bundle install
           bundle exec rake generate_secret_token
           bundle exec rake db:migrate redmine:plugins:migrate
