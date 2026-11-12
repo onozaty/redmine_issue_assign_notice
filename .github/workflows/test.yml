@@ -49,9 +49,8 @@ jobs:
             adapter: sqlite3
             database: db/test.sqlite3
           EOF
-          # Newer images set it in the bundler config, which takes precedence over BUNDLE_WITHOUT.
-          bundle config set --local without development || bundle config --local without development
-          bundle config
+          # The image's bundler config takes precedence over BUNDLE_WITHOUT, so remove it.
+          sed -i '/^BUNDLE_WITHOUT:/d' "$BUNDLE_APP_CONFIG/config"
           bundle install
           bundle exec rake generate_secret_token
           bundle exec rake db:migrate redmine:plugins:migrate
