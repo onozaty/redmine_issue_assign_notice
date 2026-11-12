@@ -3,7 +3,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class IssueHookListenerTest < ActiveSupport::TestCase
   fixtures :users, :email_addresses, :user_preferences, :members, :member_roles, :roles,
            :projects, :projects_trackers, :enabled_modules, :trackers, :issues, :issue_statuses,
-           :enumerations, :workflows, :journals, :journal_details
+           :enumerations, :workflows, :journals, :journal_details, :issue_categories, :versions
 
   def setup
     @client = RedmineIssueAssignNotice::IssueHookListener.instance.instance_variable_get(:@client)
