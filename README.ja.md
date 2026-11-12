@@ -83,7 +83,7 @@ bundle exec rake redmine:plugins:test NAME=redmine_issue_assign_notice RAILS_ENV
 
 ## サポートバージョン
 
-Redmine 3.0.x から 3.4.x, 4.0.x 以降
+Redmine 4.0.x 以降
 
 ## ライセンス
 
