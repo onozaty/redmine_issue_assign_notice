@@ -40,6 +40,10 @@ module RedmineIssueAssignNotice
 
     def notice(issue, old_assgined_to, new_assgined_to, note, author)
 
+      if issue.is_private?
+        return
+      end
+
       if Setting.plugin_redmine_issue_assign_notice['notice_url_each_project'] == '1'
         notice_url_field = issue.project.custom_field_values.find{ |field| field.custom_field.name == 'Assign Notice URL' }
         notice_url = notice_url_field.value unless notice_url_field.nil?
