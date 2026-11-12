@@ -28,8 +28,8 @@ module RedmineIssueAssignNotice
   
       def create(issue, old_assgined_to, new_assgined_to, note, author)
   
-        text = ""
-  
+        text = +""
+
         mention_id = MessageHelper.mention_target(new_assgined_to, author)
         if mention_id.present?
           text << @formatter.mention(mention_id)
@@ -55,7 +55,7 @@ module RedmineIssueAssignNotice
   
       def create(issue, old_assgined_to, new_assgined_to, note, author)
   
-        text = ""
+        text = +""
 
         mention_id = MessageHelper.mention_target(new_assgined_to, author)
         if mention_id.present?
