@@ -19,8 +19,6 @@ jobs:
       image: redmine:${{ matrix.redmine }}
     env:
       RAILS_ENV: test
-      # The official image installs gems without the development and test groups.
-      BUNDLE_WITHOUT: development
     defaults:
       run:
         working-directory: /usr/src/redmine
@@ -32,14 +30,14 @@ jobs:
       - name: Install build tools
         run: |
           # Old images are based on Debian releases that have moved to archive.debian.org.
-          if ! apt-get update; then
+          if ! (apt-get update && apt-get install -y build-essential); then
             find /etc/apt -name '*.list' -o -name '*.sources' | xargs sed -i \
               -e 's|deb.debian.org|archive.debian.org|g' \
               -e 's|security.debian.org|archive.debian.org|g' \
               -e '/-updates/d'
             apt-get -o Acquire::Check-Valid-Until=false update
+            apt-get install -y build-essential
           fi
-          apt-get install -y build-essential
 
       - name: Set up Redmine
         run: |
@@ -49,6 +47,8 @@ jobs:
             adapter: sqlite3
             database: db/test.sqlite3
           EOF
+          # The official image installs gems without the development and test groups.
+          bundle config set --local without development || bundle config --local without development
           bundle install
           bundle exec rake generate_secret_token
           bundle exec rake db:migrate redmine:plugins:migrate
