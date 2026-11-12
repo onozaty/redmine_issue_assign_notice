@@ -25,15 +25,18 @@ module RedmineIssueAssignNotice
 
       Rails.logger.debug "[RedmineIssueAssignNotice] IssueHookListener#redmine_issue_assign_notice_change issue_id:#{issue.id}"
 
-      assign_journal = journal.details.find{ |detail| detail.property == 'attr' && detail.prop_key == 'assigned_to_id' }
-      if assign_journal.nil? 
+      # Redmine moves the details of a journal with private notes into a separate journal,
+      # so the assignment change is taken from the issue instead of the journal.
+      if not issue.saved_change_to_assigned_to_id?
         return
       end
 
-      old_assgined_to = Principal.find_by_id(assign_journal.old_value.to_i) unless assign_journal.old_value.nil?
-      new_assgined_to = Principal.find_by_id(assign_journal.value.to_i) unless assign_journal.value.nil?
+      old_assgined_to = Principal.find_by_id(issue.assigned_to_id_before_last_save)
+      new_assgined_to = issue.assigned_to
 
-      notice(issue, old_assgined_to, new_assgined_to, journal.notes, journal.user)
+      note = journal.private_notes? ? '' : journal.notes
+
+      notice(issue, old_assgined_to, new_assgined_to, note, journal.user)
     end
 
     private
