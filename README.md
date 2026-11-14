@@ -83,7 +83,8 @@ bundle exec rake redmine:plugins:test NAME=redmine_issue_assign_notice RAILS_ENV
 
 ## Supported versions
 
-Redmine 3.0.x - 3.4.x, 4.0.x or later
+* Current version : Redmine 4.0.x or later
+* 2.3.0 : Redmine 3.0.x - 3.4.x, 4.0.x or later
 
 ## License
 
